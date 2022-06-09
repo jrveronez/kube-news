@@ -1,11 +1,10 @@
-# Deployment do Postgre
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgre
 spec:
   selector:
-    matchLabels:
+    matchLabels: 
       app: postgre
   template:
     metadata:
@@ -19,7 +18,7 @@ spec:
             - containerPort: 5432
           env:
           - name: POSTGRES_PASSWORD
-            value: "Kube#123"
+            value: "kubenews"
           - name: POSTGRES_USER
             value: "kubenews"
           - name: POSTGRES_DB
@@ -33,8 +32,9 @@ spec:
   selector:
     app: postgre
   ports:
-  - port: 5432 
+  - port: 5432
     targetPort: 5432
+  type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -52,16 +52,16 @@ spec:
     spec:
       containers:
       - name: kubenews
-        image: fabricioveronez/kube-news:v1
-        env:
-        - name: DB_DATABASE
-          value: "kubenews"
-        - name: DB_USERNAME
-          value: "kubenews"
-        - name: DB_PASSWORD
-          value: "Kube#123"
-        - name: DB_HOST
-          value: "postgre"      
+        image: jrveronez/kube-news:v1
+        env: 
+          - name: DB_DATABASE
+            value: "kubenews"
+          - name: DB_USERNAME
+            value: "kubenews"
+          - name: DB_PASSWORD
+            value: "kubenews"
+          - name: DB_HOST
+            value: postgre
 ---
 apiVersion: v1
 kind: Service
